@@ -1,5 +1,5 @@
 subcomponents:
-  hello-rings-master:
+  diamond-rings-master:
     config:
       author: Samiya Akhtar
       branchName: master
