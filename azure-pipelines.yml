@@ -28,7 +28,7 @@ steps:
       git checkout -b $BRANCH_NAME
     fi
     
-    repo="hello-rings"
+    repo="diamond-rings"
     service="$repo-$BRANCH_NAME"
     echo "fab set --subcomponent $repo.$service buildId=$NUMBER"
     fab set --subcomponent $repo.$service buildId=$NUMBER
