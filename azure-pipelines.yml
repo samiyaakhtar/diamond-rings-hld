@@ -1,5 +1,6 @@
 trigger:
 - master
+- '*'
 
 pool:
   vmImage: 'Ubuntu-16.04'
@@ -16,21 +17,33 @@ steps:
   env:
     BEDROCK_BUILD_SCRIPT: https://raw.githubusercontent.com/Microsoft/bedrock/master/gitops/azure-devops/build.sh
 
-- task: ShellScript@2
-  displayName: Validate fabrikate definitions
-  inputs:
-    scriptPath: build.sh
-  condition: eq(variables['Build.Reason'], 'PullRequest')
+- bash: |
+    . build.sh --source-only
+    init
+    get_fab_version
+    download_fab
+    git_connect
+    
+    if ! git checkout $BRANCH_NAME; then
+      git checkout -b $BRANCH_NAME
+    fi
+    
+    repo="hello-rings"
+    service="$repo-$BRANCH_NAME"
+    echo "fab set --subcomponent $repo.$service buildId=$NUMBER"
+    fab set --subcomponent $repo.$service buildId=$NUMBER
+    echo "git status"
+    git status
+    git add -A
+    git config --global user.email "you@example.com"
+    git config --global user.name "Azure DevOps Bot"
+    git commit -m "Fab setting buildId"
+    echo "git status"
+    git status
+    git push https://$ACCESS_TOKEN@github.com/samiyaakhtar/diamond-rings-cluster
+  displayName: Fab set version
   env:
-    VERIFY_ONLY: 1
-
-- task: ShellScript@2
-  displayName: Transform fabrikate definitions and publish to YAML manifests to repo
-  inputs:
-    scriptPath: build.sh
-  condition: ne(variables['Build.Reason'], 'PullRequest')
-  env:
-    ACCESS_TOKEN_SECRET: $(ACCESS_TOKEN)
-    COMMIT_MESSAGE: $(Build.SourceVersionMessage)
-    REPO: $(MANIFEST_REPO)
     BRANCH_NAME: $(Build.SourceBranchName)
+    ACCESS_TOKEN_SECRET: $(ACCESS_TOKEN)
+    REPO: "https://github.com/samiyaakhtar/diamond-rings-cluster"
+    NUMBER: $(Build.BuildId)
