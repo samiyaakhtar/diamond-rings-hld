@@ -3,7 +3,7 @@ type: component
 subcomponents:
 - name: diamond-rings-master
   type: component
-  source: https://github.com/samiyaakhtar/diamond-rings
+  source: https://github.com/bnookala/hello-rings
   method: git
   path: ring
   branch: master
