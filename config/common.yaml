@@ -2,10 +2,10 @@ subcomponents:
   diamond-rings-master:
     config:
       author: Samiya Akhtar
-      branchName: master
-      buildDate: "2019-06-25T08:45:08.864258Z"
-      buildId: "4312"
-      commitId: b08fc564fa7aed09dbd46241b7a0d35e978ee0bb
+      branchName: ""
+      buildDate: ""
+      buildId: "4454"
+      commitId: ""
       image:
-        repository: hellorings.azurecr.io/hellorings
-        tag: hello-rings-master-4312
+        repository: helloringsazure.azurecr.io/diamondrings
+        tag: diamond-rings-master-4454
