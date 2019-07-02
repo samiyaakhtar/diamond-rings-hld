@@ -28,22 +28,25 @@ steps:
       git checkout -b $BRANCH_NAME
     fi
     
-    repo="diamond-rings"
-    service="$repo-$BRANCH_NAME"
-    echo "fab set --subcomponent $repo.$service buildId=$NUMBER"
-    fab set --subcomponent $repo.$service buildId=$NUMBER
-    echo "git status"
-    git status
+    RING_NAME="$SERVICE_NAME-$BRANCH_NAME"
+    fab set --subcomponent $SERVICE_NAME.$RING_NAME buildId=$NUMBER
+
     git add -A
-    git config --global user.email "you@example.com"
+    git config --global user.email $EMAIL
     git config --global user.name "Azure DevOps Bot"
     git commit -m "Fab setting buildId"
-    echo "git status"
-    git status
-    git push https://$ACCESS_TOKEN@github.com/samiyaakhtar/diamond-rings-cluster
+
+    # Remove http(s):// protocol from URL so we can insert PA token
+    repo_url=$REPO
+    repo_url="${repo_url#http://}"
+    repo_url="${repo_url#https://}"
+
+    git push https://$ACCESS_TOKEN@$repo_url
   displayName: Fab set version
   env:
     BRANCH_NAME: $(Build.SourceBranchName)
     ACCESS_TOKEN_SECRET: $(ACCESS_TOKEN)
     REPO: "https://github.com/samiyaakhtar/diamond-rings-cluster"
     NUMBER: $(Build.BuildId)
+    SERVICE_NAME: "diamond-rings"
+    EMAIL: "samiyaakhtar7@gmail.com"
