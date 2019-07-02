@@ -32,7 +32,7 @@ steps:
     fab set --subcomponent $SERVICE_NAME.$RING_NAME buildId=$NUMBER
 
     git add -A
-    git config --global user.email $EMAIL
+    git config --global user.email "admin@azuredevops.com"
     git config --global user.name "Azure DevOps Bot"
     git commit -m "Fab setting buildId"
 
@@ -49,4 +49,3 @@ steps:
     REPO: "https://github.com/samiyaakhtar/diamond-rings-cluster"
     NUMBER: $(Build.BuildId)
     SERVICE_NAME: "diamond-rings"
-    EMAIL: "samiyaakhtar7@gmail.com"
